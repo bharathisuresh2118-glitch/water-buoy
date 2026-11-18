@@ -1,0 +1,145 @@
+const groups = [
+  [
+    "Water Quality Monitoring",
+    [
+      ["pH Sensor", "Measures water acidity and alkalinity against configured reference ranges."],
+      ["Turbidity Sensor", "Measures water cloudiness and suspended particulate matter to flag sediment or runoff anomalies."],
+      ["DS18B20 Temperature Sensor", "Measures water temperature for environmental context and thermal pollution tracking."],
+      ["Live Monitoring", "Planned display of current water-quality readings on remote and onboard interfaces."],
+      ["Water-Quality Alerts", "Planned notification when unusual or out-of-range sensor readings are observed."]
+    ]
+  ],
+  [
+    "Environmental Monitoring",
+    [
+      ["Rain Sensor", "Detects rainfall events and surface water-contact precipitation near the monitoring area."],
+      ["DHT11 Sensor", "Measures local ambient air temperature and relative humidity."],
+      ["LDR Sensor", "Detects ambient daylight and darkness cycles to support power and lighting decisions."]
+    ]
+  ],
+  [
+    "Surface Waste Detection",
+    [
+      ["Surface Camera System", "Captures visual images of floating surface waste around the platform."],
+      ["AI Waste Identification", "Proposed computer-vision recognition of visible floating debris."],
+      ["Waste Classification", "Categorises bottles, plastic bags, packaging materials and debris."],
+      ["Waste Quantity and Coverage", "Estimates detected object count, approximate volume and relative surface coverage density."],
+      ["Cleaning Priority Calculation", "Classifies cleaning urgency as low, medium or high using proposed AI and sensor analysis."],
+      ["Worker Estimation", "Suggests an approximate optimal number of cleaning workers for field validation."],
+      ["GPS Pollution Mapping", "Marks observation coordinates and priority levels on a digital map interface."],
+      ["Floating-Waste Collection Net", "Mechanically collects a portion of detected floating waste using a net around or below the platform."],
+      ["Protective Weather Enclosure", "Houses surface electronics, sensors and power circuits in a weather-protective enclosure."]
+    ]
+  ],
+  [
+    "Underwater AI",
+    [
+      ["Underwater Camera Unit", "Captures visual imagery of the underwater river environment."],
+      ["Tethered Wired Data Link", "Transfers underwater camera imagery to the surface processing unit through a tethered cable."],
+      ["Underwater AI Debris Analysis", "Analyses underwater images to identify submerged plastics and visible benthic debris."],
+      ["Surface GPS Geo-Tagging", "Associates underwater observations with the surface platform’s active GPS coordinates."],
+      ["Underwater Observation Report", "Generates dedicated underwater-pollution observation reports for a planned dashboard."]
+    ]
+  ],
+  [
+    "Aquatic Life Protection",
+    [
+      ["12V Air Pump", "Supplies airflow to surrounding river water in controlled deployment environments."],
+      ["Air Stone and Tubing", "Distributes fine air bubbles underwater to support localised aeration."],
+      ["Fish Aeration Support", "Provides supplementary aeration support; effectiveness is not directly measured without a dissolved-oxygen sensor."]
+    ]
+  ],
+  [
+    "Fire Detection and Water Pump",
+    [
+      ["Flame Sensor", "Detects possible flames or infrared fire hazards near the monitored water surface."],
+      ["Water Motor / Pump", "Pumps water for controlled demonstrations or localised surface water circulation."],
+      ["Fire Alert Notification", "Sends a warning to operators if a possible flame condition is detected."]
+    ]
+  ],
+  [
+    "GPS and Communication",
+    [
+      ["NEO-6M GPS Module", "Provides geographic coordinates for the floating buoy when a valid satellite fix is active."],
+      ["Digital Map Integration", "Displays reported buoy positions, surface hotspots and underwater observations visually."],
+      ["ESP8266 ESP-01 Wi-Fi", "Connects the microcontroller system to local Wi-Fi networks for planned telemetry."],
+      ["GSM SIM900A Module", "Supports cellular SMS alert capability to registered contacts."],
+      ["Pollution SMS Alerts", "Shares abnormal water-quality alerts and hazard warnings alongside available GPS coordinates."],
+      ["Cleaning-Team SMS", "Can dispatch estimated waste quantity, cleaning priority, location and worker count to field teams."]
+    ]
+  ],
+  [
+    "Dashboard and Display Hardware",
+    [
+      ["Live Web Dashboard", "Planned remote presentation of telemetry, AI waste images, underwater reports and recommendations."],
+      ["Onboard LCD Display", "Shows critical local sensor readings and operational status on the floating unit."],
+      ["Alert System", "Highlights abnormal water-quality, flame and high-priority waste accumulation events."],
+      ["Historical Data Logging", "Records time-series readings and AI detections to support environmental trend observation."]
+    ]
+  ],
+  [
+    "Mobility and Power",
+    [
+      ["BLDC Propulsion Motors", "Provide controlled propulsion and movement toward target waste zones under supervised operation."],
+      ["Solar Panel and Charging", "Harvests solar energy through a charge controller to extend battery runtime."],
+      ["Battery Monitoring", "Tracks battery charge status and voltage levels for the dashboard and LCD."]
+    ]
+  ]
+];
+
+let featureNumber = 1;
+
+document.querySelector("#accordion").innerHTML = groups
+  .map((group, index) => `
+    <details ${index === 0 ? "open" : ""}>
+      <summary>
+        ${group[0]}
+        <span>${String(group[1].length).padStart(2, "0")} features</span>
+      </summary>
+
+      <ol class="feature-list">
+        ${group[1].map(feature => `
+          <li>
+            <span class="feature-num">${String(featureNumber++).padStart(2, "0")}</span>
+            <strong>${feature[0]}</strong>
+            <p>${feature[1]}</p>
+          </li>
+        `).join("")}
+      </ol>
+    </details>
+  `)
+  .join("");
+
+const menu = document.querySelector(".menu");
+const nav = document.querySelector(".nav");
+
+menu.addEventListener("click", () => {
+  const isOpen = nav.classList.toggle("open");
+
+  menu.setAttribute("aria-expanded", isOpen);
+  menu.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+});
+
+document.querySelectorAll(".nav nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    nav.classList.remove("open");
+  });
+});
+
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("on");
+      }
+    });
+  },
+  { threshold: 0.12 }
+);
+
+document
+  .querySelectorAll("section > *, .sub-grid article, .layer")
+  .forEach(element => {
+    element.classList.add("reveal");
+    observer.observe(element);
+  });
